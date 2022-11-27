@@ -3,10 +3,6 @@ name: Deploy Docker image to ECR
 on:
   workflow_call:
     inputs:
-      iam_role_arn:
-        description: "AWS IAM role for accessing ECR"
-        type: string
-        required: true
       aws_region:
         description: "AWS region"
         type: string
@@ -20,6 +16,11 @@ on:
         type: string
         default: "."
         required: false
+    secrets:
+      iam_role_arn:
+        description: "AWS IAM role for accessing ECR"
+        required: true
+
 
 jobs:
   publish-to-ecr:
@@ -32,3 +33,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ inputs.iam_role_arn}}
+          aws-region: ${{ inputs.aws_region}}
+          role-session-name: gh-actions
+          role-skip-session-tagging: trues
+  
