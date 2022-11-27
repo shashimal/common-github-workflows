@@ -7,23 +7,23 @@ on:
         description: "AWS region"
         type: string
         required: true
-    cluster:
+      cluster:
         description: "ECS cluster name"
         type: string
         required: true
-    service:
+      service:
         description: "ECS service name"
         type: string
         required: true
-    task_definition:
+      task_definition:
         description: "ECS task definition"
         type: string
         required: true
-    container_name:
+      container_name:
         description: "Container name"
         type: string
         required: true
-    image:
+      image:
         description: "Docker image URI"
         type: string
         required: true
