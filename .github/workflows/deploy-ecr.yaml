@@ -43,7 +43,7 @@ jobs:
       contents: read
       id-token: write
     outputs:
-      output1: ${{ steps.image-uri.outputs.image }}
+      image: ${{ steps.image-uri.outputs.image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
