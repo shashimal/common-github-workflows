@@ -91,5 +91,5 @@ jobs:
       - name: OutPut Image URI
         id: image-uri
         run: |
-          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr_repository }}:${{ env.IMAGE_TAG }}" >> $GITHUB_OUTPUT
+          echo "::set-output name=image::${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr_repository }}:${{ env.IMAGE_TAG }}"
         shell: bash
