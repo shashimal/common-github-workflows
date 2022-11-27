@@ -1,0 +1,75 @@
+name: Deploy ECS Application
+
+on:
+  workflow_call:
+    inputs:
+      aws_region:
+        description: "AWS region"
+        type: string
+        required: true
+    cluster:
+      description: "ECS cluster name"
+      type: string
+      required: true
+    service:
+      description: "ECS service name"
+      type: string
+      required: true
+    task_definition:
+      description: "ECS task definition"
+      type: string
+      required: true
+    container_name:
+      description: "Container name"
+      type: string
+      required: true
+    image:
+      description: "Docker image URI"
+      type: string
+      required: true
+    secrets:
+      iam_role_arn:
+        description: "AWS IAM role for deploying to ECS"
+        required: true
+
+jobs:
+  publish-to-ecr:
+    name: Deploy to ECS
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.iam_role_arn}}
+          aws-region: ${{ inputs.aws_region}}
+          role-session-name: gh-actions
+          role-skip-session-tagging: true
+
+      - name: Download task definition
+        run: aws ecs describe-task-definition --task-definition ${{ inputs.task_definition }} --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ./task-definition.json
+          container_name: {{ inputs.container_name }}
+          image: {{ inputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          cluster: ${{ inputs.cluster }}
+          service: ${{ inputs.service }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          wait-for-service-stability: true
+
+
+
+
+
+
