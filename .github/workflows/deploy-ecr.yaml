@@ -37,7 +37,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ inputs.iam_role_arn}}
+          role-to-assume: ${{ secrets.iam_role_arn}}
           aws-region: ${{ inputs.aws_region}}
           role-session-name: gh-actions
           role-skip-session-tagging: trues
