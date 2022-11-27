@@ -30,6 +30,10 @@ on:
       iam_role_arn:
         description: "AWS IAM role for accessing ECR"
         required: true
+    outputs:
+      image:
+        description: "Image URI"
+        value: ${{ jobs.publish-to-ecr.outputs.image }}
 
 jobs:
   publish-to-ecr:
@@ -39,7 +43,7 @@ jobs:
       contents: read
       id-token: write
     outputs:
-      image: ${{ steps.image-uri.outputs.image }}
+      output1: ${{ steps.image-uri.outputs.image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -91,5 +95,5 @@ jobs:
       - name: OutPut Image URI
         id: image-uri
         run: |
-          echo "::set-output name=image::${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr_repository }}:${{ env.IMAGE_TAG }}"
+          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr_repository }}:${{ env.IMAGE_TAG }}" >>$GITHUB_OUTPUT
         shell: bash
