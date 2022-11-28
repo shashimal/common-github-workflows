@@ -59,6 +59,14 @@ jobs:
           container-name: ${{ inputs.container_name }}
           image: ${{ inputs.image }}
 
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ inputs.service}}
+          cluster: ${{ inputs.cluster}}
+          wait-for-service-stability: true
+
 
 
 
