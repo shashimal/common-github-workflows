@@ -23,13 +23,13 @@ on:
         description: "Container name"
         type: string
         required: true
-      image:
-        description: "Docker image URI"
-        type: string
-        required: true
     secrets:
       iam_role_arn:
         description: "AWS IAM role for accessing ECR"
+        required: true
+      image:
+        description: "Docker image URI"
+        type: string
         required: true
 jobs:
   deploy-to-ecs:
@@ -57,7 +57,7 @@ jobs:
         with:
           task-definition: ./task-definition.json
           container-name: ${{ inputs.container_name }}
-          image: ${{ inputs.image }}
+          image: ${{ secrets.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
