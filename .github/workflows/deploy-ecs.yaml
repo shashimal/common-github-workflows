@@ -29,7 +29,6 @@ on:
         required: true
       image:
         description: "Docker image URI"
-        type: string
         required: true
 jobs:
   deploy-to-ecs:
