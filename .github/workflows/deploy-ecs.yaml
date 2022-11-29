@@ -32,7 +32,7 @@ on:
         description: "AWS IAM role for accessing ECR"
         required: true
 jobs:
-  publish-to-ecr:
+  deploy-to-ecs:
     name: Deploy to ECS
     runs-on: ubuntu-latest
     permissions:
